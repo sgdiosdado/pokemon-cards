@@ -4,18 +4,23 @@ Pokemon cards CRUD for web class
 ## Setup
 To run the project it's necessary that you add a `.env` file at `/` with the following variables:
 ```yaml
+# =========================
+# Used only the first time
+# =========================
 MONGO_INITDB_ROOT_USERNAME=root
 MONGO_INITDB_ROOT_PASSWORD=MyVeryStrongPassword1234
-```
-These variables will be use to setup the database using mongo on your system. Try to avoid special characters but they'll work.
 
-Then, add another `.env` file at `/server/` with the following variables:
-```yaml
+# =========================
+# Used at every connection
+# =========================
 DB_USERNAME=root
-# Already encoded
-DB_PASSWORD=MyVeryStrongPassword1234
+DB_PASSWORD=MyVeryStrongPassword1234 # Already encoded
 ```
-This will be use to start the connection of the Express.js server with the Mongo database. If you used special characters at the first `.env` you need to encode them as Mongo requires. For example, if you used `@` then the encoded equivalent is `%40`. Since this is annoying, please keep it simple.
+The first two variables will be use to setup the database using mongo on your system. Try to avoid special characters but if you don't, they'll work either way.
+
+The last two will be use to start the connection of the Express.js server with the Mongo database. 
+
+If you used special characters at the `.env` you'll need to encode them as Mongo specifies. For example, if you used `@` then the encoded equivalent is `%40`. Since this is annoying, please keep it simple.
 
 Your file structure will be like this:
 ```
@@ -25,7 +30,6 @@ Your file structure will be like this:
 ├── README.md
 ├── docker-compose.yml
 └── server
-    ├── .env
     ├── Dockerfile
     ├── package.json
     ├── src/
@@ -33,7 +37,9 @@ Your file structure will be like this:
 ```
 
 ## Run project
-Now you are all set to run the project, just execute `docker-compose up --build` and you can start request to the endpoints at `http://localhost:5000`.
+Now you are all set to run the project, just execute `docker-compose up --build` and you can start request to the endpoints at `http://localhost:5000/`.
+
+If everything is working, you'll see in console `Example app listening at http://localhost:5000` for the web server, and `Connection successful` for the MongoDB connection.
 
 Available endpoints:
 

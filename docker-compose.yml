@@ -9,6 +9,9 @@ services:
        - ./server/src:/server/src
     depends_on:
       - mongo
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
   mongo:
     image: mongo:3.6.19-xenial
     ports:
