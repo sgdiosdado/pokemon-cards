@@ -73,7 +73,7 @@ app.post("/card/", (req, res) => {
       message: 'Card created!',
       data: req.body
     }))
-    .catch(err => res.json({
+    .catch(err => res.status(400).json({
       code: 400,
       message: `${err}`,
       data: null

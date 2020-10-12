@@ -1,5 +1,14 @@
 version: "3"
 services:
+  client:
+    build: ./client
+    image: pokemon-client
+    ports:
+      - "8080:8080"
+    volumes:
+       - ./client:/client
+    environment:
+      NODE_ENV: development
   server:
     build: ./server
     image: pokemon-api
