@@ -60,3 +60,12 @@ For POST and PUT, you'll need to provide a body like:
 }
 ```
 You can read the comments of routes at `/server/src/index.js` for more details.
+
+## Troubleshoot
+If you are experiencing errors related to the client dependecies, install them before running the containers.
+This means:
+- Run `yarn` at client
+- Switch to server and run `yarn` aswell
+- Now launch the containers with `docker-compose up`
+
+This bug is currently under resolution, sorry for any inconvenience.
