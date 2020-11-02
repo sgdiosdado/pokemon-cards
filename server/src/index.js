@@ -11,6 +11,8 @@ const port = 5000
  */
 const db = require("./db/db.js");
 const Card = require("./db/models/card");
+const Game = require("./db/models/game");
+const mongoose = require('mongoose')
 
 app.use(cors());
 app.use(express.json());
@@ -80,6 +82,22 @@ app.post("/card/", (req, res) => {
     }))
 })
 
+// Create cards with given correct body array (check CardScheme)
+app.post("/cards/", (req, res) => {
+  for(let card of req.body.cards) {
+    const cardDoc = new Card(card)
+    cardDoc.save()
+  }
+  Game.findOne({}, (err, game) => {
+    if (err) return err;
+    if (!game) {
+      const gameDoc = new Game({cards: []})
+      gameDoc.save()
+    }
+  })
+  res.json({message: "Created!"})
+})
+
 // Updates a card with a given export id and correct body (check CardScheme)
 app.put("/card/:exportId", (req, res) => {
   Card.update(
@@ -112,6 +130,60 @@ app.delete("/card/:exportId", (req, res) => {
     data: null
   }))
 })
+
+// Draw 5 random cards
+app.get("/draw/", (req, res) => {
+  Card.aggregate(
+    [{$sample: {size: 5}}]
+  )
+    .then(drawnCards => {
+      Game.findOne({}, (err, game) => {
+        if(err) return err;
+        Game.update({}, {cards: game.cards.concat(drawnCards)}).then(_ => console.log('Updated!'))
+      })
+
+      res.json({
+        code: 200,
+        message: "Drew 5 cards!",
+        data: drawnCards
+      })
+    })
+})
+
+app.post("/game/", (req, res) => {
+  const game = new Card(req.body)
+  game.save()
+  .then(_ => res.json({
+      code: 200,
+      message: 'Game created!',
+      data: req.body
+    }))
+    .catch(err => res.status(400).json({
+      code: 400,
+      message: `${err}`,
+      data: null
+    }))
+})
+
+app.get("/game/", (req, res) => {
+  Game.findOne({}, (err, game) => {
+    if(err) return err;
+    if (game) {
+      res.json({
+        code: 200,
+        message: "Game exists!",
+        data: game,
+      })
+    } else {
+      res.json({
+        code: 404,
+        message: "No game exists!",
+        data: null
+      })
+    }
+  })
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
